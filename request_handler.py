@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from urllib.parse import urlparse, parse_qs
+from views import *
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -61,10 +62,25 @@ class HandleRequests(BaseHTTPRequestHandler):
             ( resource, id ) = parsed
         if resource == "authors":
             print("yessir")
-            # if id is not None:
-            #     response = get_single_author(id)
-            # else:
-            #     response = get_all_authors
+            if id is not None:
+                response = get_single_author(id)
+            else:
+                response = get_all_authors()
+            
+        encoded_response = json.dumps(response).encode('utf-8')
+        self.wfile.write(encoded_response)
+        
+    def do_POST(self):
+        self._set_headers(201)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+        (resource, id) = self.parse_url(self.path)
+        new_author = None
+        if resource == "authors":
+            new_author = create_author(post_body)
+            self.wfile.write(json.dumps(new_author).encode())
+        
         
 
 def main():
