@@ -18,6 +18,8 @@ VALUES (
     0
 );
 
+DROP table book;
+
 -- SELECT
 --     a.email,
 --     a.first_name,
@@ -26,14 +28,14 @@ VALUES (
 --     a.favorite
 -- FROM a Authors;
 
--- CREATE TABLE Book (
---   id INTEGER PRIMARY KEY AUTOINCREMENT,
---   title TEXT,
---   image TEXT,
---   price DECIMAL(10, 2),
---   sale BOOLEAN,
---   description TEXT
--- );
+CREATE TABLE Books (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT,
+  image TEXT,
+  price DECIMAL(10, 2),
+  sale BOOLEAN,
+  description TEXT
+);
 
 -- INSERT INTO 'Book' VALUES (
 -- null,

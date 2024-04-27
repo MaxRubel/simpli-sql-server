@@ -1,42 +1,34 @@
 import sqlite3
-from models import Author
+from models import Book
 
-def get_all_authors():
+def get_all_books():
     with sqlite3.connect("./db.sqlite3") as conn:
-
-        # Just use these. It's a Black Box.
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-    # def __init__(self, id, email, first_name, last_name, image, favorite):
         db_cursor.execute(
         """
         SELECT
             a.id,
-            a.email,
-            a.first_name,
-            a.last_name,
+            a.title,
             a.image,
-            a.favorite
-        FROM Authors a
+            a.price,
+            a.sale,
+            a.description
+        FROM Books a
         """)
 
-        authors = []
-
+        books = []
         dataset = db_cursor.fetchall()
-
         for row in dataset:
-            author = Author(row['id'], row['email'], row['first_name'], row['last_name'], row['image'], row['favorite'] )
-            authors.append(author.__dict__)
+            book = Book(row['id'], row['title'], row['image'], row['price'], row['sale'], row['description'] )
+            books.append(book.__dict__)
 
-        return authors
+        return books
     
-def get_single_author(id):
+def get_single_books(id):
     with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-
-        # Use a ? parameter to inject a variable's value
-        # into the SQL statement.
         db_cursor.execute("""
         SELECT
             a.id,
@@ -45,64 +37,60 @@ def get_single_author(id):
             a.last_name,
             a.image,
             a.favorite
-        FROM Authors a
+        FROM Books a
         WHERE a.id = ?
         """, ( id, ))
 
         data = db_cursor.fetchone()
-
-        author = Author(data['id'], data['email'], data['first_name'],
+        book = Book(data['id'], data['email'], data['first_name'],
                             data['last_name'], data['image'],
                             data['favorite'])
 
-        return author.__dict__
+        return book.__dict__
     
     
-def create_author(new_author):
+def create_books(new_book):
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
-            # def __init__(self, id, email, first_name, last_name, image, favorite):
         db_cursor.execute("""
-        INSERT INTO Authors
+        INSERT INTO Books
             ( email, first_name, last_name, image, favorite )
         VALUES
             ( ?, ?, ?, ?, ?);
-        """, (new_author['email'],
-              new_author['first_name'], new_author['last_name'],
-              new_author['image'], new_author['favorite'], ))
+        """, (new_book['email'],
+              new_book['first_name'], new_book['last_name'],
+              new_book['image'], new_book['favorite'], ))
         
         id = db_cursor.lastrowid
-        new_author['id'] = id
-        return new_author
+        new_book['id'] = id
+        return new_book
     
-def update_author(id, new_author):
+def update_books(id, new_book):
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
-        print(new_author)
         db_cursor.execute("""
-        UPDATE Authors
+        UPDATE Books
             SET
                 first_name = ?,
                 last_name = ?,
                 image = ?,
                 favorite = ?
         WHERE id = ?
-        """, (new_author['first_name'], new_author['last_name'],
-              new_author['image'], new_author['favorite'],
+        """, (new_book['first_name'], new_book['last_name'],
+              new_book['image'], new_book['favorite'],
              id, ))
         rows_affected = db_cursor.rowcount
 
-    # return value of this function
     if rows_affected == 0:
         return False
     else:
         return True
     
-def delete_author(id):
+def delete_books(id):
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
         db_cursor.execute("""
-        DELETE FROM Authors
+        DELETE FROM Books
         WHERE id = ?
         """, (id, ))
     

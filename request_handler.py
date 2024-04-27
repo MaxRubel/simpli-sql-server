@@ -61,9 +61,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         if '?' not in self.path:
             ( resource, id ) = parsed
         if resource == "authors":
-            print("yessir")
             if id is not None:
                 response = get_single_author(id)
+                print(response)
             else:
                 response = get_all_authors()
             
@@ -80,6 +80,30 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "authors":
             new_author = create_author(post_body)
             self.wfile.write(json.dumps(new_author).encode())
+            
+    def do_PUT(self):
+        print('updating....')
+        self._set_headers(204)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+
+        (resource, id) = self.parse_url(self.path)
+        success = False
+        
+        if resource == 'authors':
+            success == update_author(id, post_body)
+            
+            
+    
+    def do_DELETE(self):
+        self._set_headers(204)
+        (resource, id) = self.parse_url(self.path)
+        
+        if resource == 'authors':
+            delete_author(id)
+        
+        self.wfile.write("".encode())
         
         
 
