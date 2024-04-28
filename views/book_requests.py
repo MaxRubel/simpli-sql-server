@@ -1,5 +1,5 @@
 import sqlite3
-from models import Book
+from models import Book, Author
 
 def get_all_books():
     with sqlite3.connect("./db.sqlite3") as conn:
@@ -8,20 +8,57 @@ def get_all_books():
         db_cursor.execute(
         """
         SELECT
-            a.id,
-            a.title,
-            a.image,
-            a.price,
-            a.sale,
-            a.description
+        *
         FROM Books a
         """)
 
         books = []
         dataset = db_cursor.fetchall()
+        #get books
         for row in dataset:
             book = Book(row['id'], row['title'], row['image'], row['price'], row['sale'], row['description'] )
-            books.append(book.__dict__)
+
+            db_cursor.execute(
+            """
+            SELECT
+            a.author_id
+            FROM author_books a
+            WHERE book_id = ?
+            """, (book.id,))
+            
+            dataset2 = db_cursor.fetchall()
+            author_ids = []
+            
+            #get author of book
+            for row in dataset2:
+                author_ids.append(row['author_id'])
+            for author_id in author_ids:
+                db_cursor.execute(
+                """
+                SELECT
+                *
+                FROM Authors
+                WHERE id = ?
+                """, (author_id,))
+                dataset3 = db_cursor.fetchall()
+                authors = []
+                for row in dataset3:
+                    author = Author(row['id'], row['email'], row['first_name'], row['last_name'], row['image'], row['favorite'])
+                    del author.books
+                    author = author.__dict__
+                    authors.append(author)
+                
+                book_dict = {
+                'id': book.id,
+                'title': book.title,
+                'image': book.image,
+                'price': book.price,
+                'sale': book.sale,
+                'description': book.description,
+                'authors': authors
+                }
+   
+                books.append(book_dict)
 
         return books
     

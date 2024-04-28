@@ -6,3 +6,4 @@ class Author():
         self.last_name = last_name
         self.image = image
         self.favorite = favorite
+        self.books = []

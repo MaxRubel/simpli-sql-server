@@ -37,6 +37,9 @@
 --   description TEXT
 -- );
 
+-- drop table books;
+-- drop table Author_Books;
+
 CREATE TABLE Author_Books (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   author_id INTEGER,

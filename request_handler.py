@@ -69,6 +69,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             if id is not None:
                 response = get_single_book(id)
             else:
+                print('get books')
                 response = get_all_books()
             
         encoded_response = json.dumps(response).encode('utf-8')
@@ -85,12 +86,40 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_author = create_author(post_body)
             self.wfile.write(json.dumps(new_author).encode())
         if resource == "books":
+            print('less go book')
             new_book = create_book(post_body)
             self.wfile.write(json.dumps(new_book).encode())
         if resource == "author_books":
-            print('author books yo')
             new_author_book = create_author_book(post_body)
             self.wfile.write(json.dumps(new_author_book).encode())
+            
+    def do_PUT(self):
+        self._set_headers(204)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+
+        (resource, id) = self.parse_url(self.path)
+        
+        success = False
+        
+        if resource == "authors":
+            success = update_author(id, post_body)
+
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+
+        self.wfile.write("".encode())
+    def do_DELETE(self):
+        self._set_headers(204)
+
+        (resource, id) = self.parse_url(self.path)
+
+        if resource == "authors":
+            delete_author(id)
+
             
         
         
