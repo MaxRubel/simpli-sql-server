@@ -6,3 +6,4 @@ class Book():
         self.price = price
         self.sale = sale
         self.description = description
+        self.authors = []

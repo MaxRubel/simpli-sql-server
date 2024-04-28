@@ -9,16 +9,16 @@
 
 -- Drop table Author;
 
-INSERT INTO Authors (email, first_name, last_name, image, favorite)
-VALUES (
-    'barack@whitehouse.com',
-    'Barack',
-    'Obama',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/1280px-President_Barack_Obama.jpg',
-    0
-);
+-- INSERT INTO Authors (email, first_name, last_name, image, favorite)
+-- VALUES (
+--     'barack@whitehouse.com',
+--     'Barack',
+--     'Obama',
+--     'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/President_Barack_Obama.jpg/1280px-President_Barack_Obama.jpg',
+--     0
+-- );
 
-DROP table book;
+-- DROP table book;
 
 -- SELECT
 --     a.email,
@@ -28,13 +28,21 @@ DROP table book;
 --     a.favorite
 -- FROM a Authors;
 
-CREATE TABLE Books (
+-- CREATE TABLE Books (
+--   id INTEGER PRIMARY KEY AUTOINCREMENT,
+--   title TEXT,
+--   image TEXT,
+--   price DECIMAL(10, 2),
+--   sale BOOLEAN,
+--   description TEXT
+-- );
+
+CREATE TABLE Author_Books (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  title TEXT,
-  image TEXT,
-  price DECIMAL(10, 2),
-  sale BOOLEAN,
-  description TEXT
+  author_id INTEGER,
+  book_id INTEGER,
+  FOREIGN KEY (author_id) REFERENCES Authors(id),
+  FOREIGN KEY (book_id) REFERENCES Books(id)
 );
 
 -- INSERT INTO 'Book' VALUES (
