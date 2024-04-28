@@ -25,7 +25,7 @@ def get_all_books():
 
         return books
     
-def get_single_books(id):
+def get_single_book(id):
     with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
@@ -49,17 +49,18 @@ def get_single_books(id):
         return book.__dict__
     
     
-def create_books(new_book):
+def create_book(new_book):
+    # title, image, price, sale, description
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
         db_cursor.execute("""
         INSERT INTO Books
-            ( email, first_name, last_name, image, favorite )
+            ( title, image, price, sale, description )
         VALUES
             ( ?, ?, ?, ?, ?);
-        """, (new_book['email'],
-              new_book['first_name'], new_book['last_name'],
-              new_book['image'], new_book['favorite'], ))
+        """, (new_book['title'],
+              new_book['image'], new_book['price'],
+              new_book['sale'], new_book['description'], ))
         
         id = db_cursor.lastrowid
         new_book['id'] = id
