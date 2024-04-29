@@ -125,7 +125,6 @@ def create_author(new_author):
 def update_author(id, new_author):
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
-        print(new_author)
         db_cursor.execute("""
         UPDATE Authors
             SET
@@ -151,5 +150,9 @@ def delete_author(id):
         db_cursor.execute("""
         DELETE FROM Authors
         WHERE id = ?
+        """, (id, ))
+        db_cursor.execute("""
+        DELETE FROM Author_books
+        WHERE author_id = ?
         """, (id, ))
     

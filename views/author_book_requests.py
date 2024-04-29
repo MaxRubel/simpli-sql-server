@@ -1,7 +1,7 @@
 import sqlite3
 
 def create_author_book(new_author_book):
-  # id, author_id, book_id
+
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
         db_cursor.execute("""
