@@ -40,13 +40,16 @@
 -- drop table books;
 -- drop table Author_Books;
 
-CREATE TABLE Author_Books (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER,
-  book_id INTEGER,
-  FOREIGN KEY (author_id) REFERENCES Authors(id),
-  FOREIGN KEY (book_id) REFERENCES Books(id)
-);
+-- CREATE TABLE Author_Books (
+--   id INTEGER PRIMARY KEY AUTOINCREMENT,
+--   author_id INTEGER,
+--   book_id INTEGER,
+--   FOREIGN KEY (author_id) REFERENCES Authors(id),
+--   FOREIGN KEY (book_id) REFERENCES Books(id)
+-- );
+
+DELETE FROM author_books
+WHERE id > 9;
 
 -- INSERT INTO 'Book' VALUES (
 -- null,
